@@ -63,7 +63,7 @@ const Header2 = () => {
                 </svg>
                 <a href="">{isLoggedIn ? "Profile" : "Singup"}</a>
               </li>
-              <li className="nav__links">
+              <li className="nav__links" onClick={() => navigate('/cart')}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
