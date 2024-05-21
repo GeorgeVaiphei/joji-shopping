@@ -1,0 +1,215 @@
+.register {
+
+    background-image: url('/cbg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.signup {
+    position: relative;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.closeForm {
+    position: absolute;
+    top: 0.2rem;
+    right: 0.2rem;
+    width: 2rem;
+    cursor: pointer;
+
+    &:hover {
+        stroke: var(--clr-r1);
+        transform: scale(1.1);
+    }
+}
+
+.cloud {
+    width: 5rem;
+    position: absolute;
+    top: -2.7rem;
+    fill: white;
+}
+
+.signup h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.input__box {
+    position: relative;
+    margin-bottom: 1rem;
+    /* margin-bottom: 16px; */
+    /* border: 1px solid red; */
+}
+
+svg {
+    width: 1.7rem;
+    stroke: gray;
+}
+
+.input__box :is(label) {
+    position: absolute;
+    top: 0.91rem;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+.input__box label {
+    left: 2.3rem;
+    padding: 0 0.3rem;
+}
+
+.input__box svg {
+    position: absolute;
+    top: 0.6rem;
+    left: 4px;
+}
+
+.input__box input {
+    height: 3rem;
+    width: 260px;
+    padding: 0 2.5rem;
+    font-size: var(--s-base);
+    border-radius: 8px;
+    transition: 0.3s;
+    outline: none;
+    border: 1px solid #aaa;
+}
+
+#pw {
+    /* width: 75%; */
+}
+
+.eye {
+    position: absolute;
+    top: -1rem;
+    left: -2.5rem;
+    width: 1rem;
+    height: 1rem;
+    position: relative;
+    transform: translate(-2.3rem, -0.2rem);
+    cursor: pointer;
+}
+
+#eye-close {}
+
+
+/* .input__box> :is(input:focus, .has-value) {
+    border-color: var(--clr-b2);
+} */
+
+.input__box> :is(input.valid.has-value) {
+    border-color: var(--clr-g2);
+}
+
+.input__box> :is(input:focus, .has-value)~label {
+    background-color: white;
+    border-radius: 8px;
+    transform: translate(-1rem, -1.5rem);
+}
+
+.spinner {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.5rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 3px solid var(--clr-l2);
+    border-top-color: var(--clr-b2);
+    animation: spin 1s infinite linear;
+    opacity: 0;
+
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+.check {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
+    margin-bottom: 1rem;
+
+    a {
+        color: var(--clr-b2);
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.hasAcc p {
+    margin-top: 1rem;
+    text-align: center;
+
+    a {
+        color: var(--clr-b2);
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.regBtn {
+    width: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 3rem;
+    border-radius: 8px;
+    background-color: var(--clr-b2);
+    outline: none;
+    border: none;
+
+    p {
+        color: var(--clr-l1);
+        font-size: var(--s-l);
+        font-weight: 500;
+    }
+
+    svg {
+        stroke: var(--clr-l1);
+    }
+}
+
+.regBtn:not(:disabled):hover {
+    /* transform: scale(1.01); */
+    animation: giggle 0.3s linear;
+}
+
+@keyframes giggle {
+    0% {
+        transform: translateX(0.3rem);
+    }
+
+}
+
+button:disabled {
+    opacity: 0.5;
+}
