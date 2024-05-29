@@ -1,12 +1,14 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "../styles/citems.css";
+import { ToastContainer, toast } from "react-toastify";
 
 const ClickedItems = () => {
   const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [item, setItem] = useState("");
+  const navigate = useNavigate();
 
   let id = params.id;
   console.log("Id : " + id);
@@ -33,8 +35,18 @@ const ClickedItems = () => {
     "EMI starting from ₹2,075/month",
   ];
 
+  const buyHandler = () => {
+    if(!localStorage.getItem('email')) {
+      toast.warning("Please login first");
+      setTimeout(() => {
+        navigate('/signup');
+      }, 1000);
+    }
+  }
+
   return (
     <>
+    <ToastContainer />
       <div className="cItems container">
         <div className="cItems__wrapper">
           <div className="thumbnail">
@@ -102,7 +114,7 @@ const ClickedItems = () => {
             </span>
 
             <div className="des">{item.description}</div>
-            <button className="buyBtn">
+            <button className="buyBtn" onClick={buyHandler}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

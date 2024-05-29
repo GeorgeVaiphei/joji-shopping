@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "../styles/register.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const [btnVal, setBtnVal] = useState("Sign up");
@@ -9,7 +12,7 @@ const Register = () => {
   const [eye, setEye] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  console.log(location);
+  console.log("Location ", location);
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -18,6 +21,75 @@ const Register = () => {
   const pwHandler = () => {
     setEye((prev) => !prev);
     // console.log(eye);
+  };
+
+  const notify = () => {
+    // toast('Signing up')
+  };
+
+  const regHandler = (e) => {
+    e.preventDefault();
+
+    // === Login ===
+    if (location.pathname === "/login") {
+      if (username == "") {
+        toast.warning("Enter your username");
+      } else if (password == "") {
+        toast.warning("Enter a password");
+      } else {
+        const logInfo = {
+          username: username,
+          password: password,
+        };
+        axios.post("http://localhost:8080/login", logInfo).then((res) => {
+          console.log(res);
+          if (res.data.message == "Email or password is incorrect") {
+            toast.error("Email or password is incorrect");
+          } else {
+            if (res.data.message == "Login successful") {
+              toast.success("Login successful");
+              localStorage.setItem("id", res.data.results[0].id);
+              localStorage.setItem("username", res.data.results[0].username);
+              localStorage.setItem("email", res.data.results[0].email);
+              setTimeout(() => {
+                navigate("/");
+              }, 1000);
+            }
+          }
+        });
+      }
+
+      // === Signup ===
+    } else {
+      if (username == "") {
+        toast.warning("Enter your username");
+      } else if (email == "") {
+        toast.warning("Enter your email id");
+      } else if (password == "") {
+        toast.warning("Enter a password");
+      } else {
+        const info = {
+          username: username,
+          email: email,
+          password: password,
+        };
+        axios.post("http://localhost:8080/signup", info).then((res) => {
+          console.log(res);
+          if (res.data.message == "Username taken") {
+            toast.warning("Username taken");
+          } else if (res.data.message == "Email already exist") {
+            toast.warning("Email already exist");
+          } else if (res.data.message == "Sign up successful") {
+            toast.success("Sign up successful");
+            setUsername("");
+            setEmail("");
+            setPassword("");
+            setEye(false);
+            navigate("/login");
+          }
+        });
+      }
+    }
   };
 
   useEffect(() => {
@@ -36,6 +108,7 @@ const Register = () => {
   return (
     <>
       <div className="register container">
+        <ToastContainer autoClose={2000} />
         <div className="signup">
           <svg
             onClick={() => navigate("/")}
@@ -69,7 +142,7 @@ const Register = () => {
           </svg>
 
           <h1>{btnVal}</h1>
-          <form>
+          <form onSubmit={regHandler}>
             <div className="signup__wrapper">
               <div className="input__box">
                 <input
@@ -192,7 +265,7 @@ const Register = () => {
               )}
               {btnVal == "Login" && <a>Forget password?</a>}
             </span>
-            <button className="regBtn" disabled>
+            <button className="regBtn" onClick={notify}>
               <p>{btnVal}</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"

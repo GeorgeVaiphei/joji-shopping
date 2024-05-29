@@ -1,9 +1,10 @@
-import React from "react";
-import '../styles/cart.css'
+import React, { useContext } from "react";
+import "../styles/cart.css";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="cart container">
@@ -22,7 +23,9 @@ const Cart = () => {
             />
           </svg>
           <h2>Your Cart is empty</h2>
-          <button className="shopBtn" onClick={() => navigate('/')}>Shop Now</button>
+          <button className="shopBtn" onClick={() => navigate("/")}>
+            Shop Now
+          </button>
         </div>
       </div>
     </>

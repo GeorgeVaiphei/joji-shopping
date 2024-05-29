@@ -111,6 +111,10 @@
     svg {
         width: 2rem;
     }
+
+    a {
+        text-transform: capitalize;
+    }
 }
 
 .nav__links:hover {

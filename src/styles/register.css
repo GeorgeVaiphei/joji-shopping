@@ -205,8 +205,15 @@ svg {
 }
 
 @keyframes giggle {
-    0% {
+    0% {}
+
+    50% {
         transform: translateX(0.3rem);
+    }
+
+    100% {
+        transform: translateX(0);
+
     }
 
 }

@@ -14,7 +14,7 @@ const Content = () => {
 
   // Use context from Homepage
   const [searchData] = useContext(Context);
-  console.log(searchData);
+  console.log('Searched data ', searchData);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +23,7 @@ const Content = () => {
         .get(`https://dummyjson.com/products?skip=${skip}&limit=20`)
         .then((res) => {
           setIsLoading(false);
+          // console.log('Content data ', res.data)
           setData((prev) => [...prev, ...res.data.products]);
         });
     };
@@ -44,7 +45,7 @@ const Content = () => {
 
     fetchData();
   }, [skip]);
-  console.log(data);
+  // console.log('Main data ', data);
 
   return (
     <>
@@ -67,7 +68,7 @@ const Content = () => {
         <div className="container loadBtn">
           {data && (
             <>
-              {!searchData && skip < 80 && (
+              {!searchData && skip < 174 && (
                 <button onClick={() => setSkip((prev) => prev + 20)}>
                   {loading ? "Loading. . ." : "Load More"}
                 </button>

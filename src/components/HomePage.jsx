@@ -3,6 +3,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Content from "./Content";
 
+
 export const Context = React.createContext();
 
 const HomePage = () => {

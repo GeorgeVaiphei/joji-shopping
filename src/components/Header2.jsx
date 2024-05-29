@@ -1,15 +1,26 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/header.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Header2 = () => {
+  const [pname, setPName] = useState("");
   const [menu, setMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showNav, setShowNav] = useState(true);
 
   const navigate = useNavigate();
 
+  let user_id = localStorage.getItem("id");
+
+
   useEffect(() => {
+    localStorage.getItem("email") ? setIsLoggedIn("true") : "";
+
+    axios.get("http://localhost:8080/singleuserlist/" + user_id).then((res) => {
+      setPName(res.data.message[0].username);
+    });
+
     // Menu open overflow handling
     let overflow;
     menu ? (overflow = "hidden") : (overflow = "auto");
@@ -31,7 +42,7 @@ const Header2 = () => {
       { passive: true }
     );
     top = scrollY <= 0 ? 0 : scrollY;
-  });
+  }, []);
 
   return (
     <>
@@ -43,27 +54,47 @@ const Header2 = () => {
               JOJI.com
             </a>
           </ul>
-          
+
           {/* === Nav Items === */}
           <ul className={menu ? "nav__item-3" : "close"}>
             <div className="link__wrapper">
-              <li className="nav__links" onClick={() => navigate("/signup")}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                  />
-                </svg>
-                <a href="">{isLoggedIn ? "Profile" : "Singup"}</a>
-              </li>
-              <li className="nav__links" onClick={() => navigate('/cart')}>
+              {!isLoggedIn && (
+                <li className="nav__links" onClick={() => navigate("/signup")}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                  </svg>
+                  <a href="">Signup</a>
+                </li>
+              )}
+              {isLoggedIn && (
+                <li className="nav__links" onClick={() => navigate("/profile")}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                  </svg>
+                  <a href="">{pname}</a>
+                </li>
+              )}
+              <li className="nav__links" onClick={() => navigate("/cart")}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

@@ -5,6 +5,10 @@ import Register from "./components/Register";
 import CartPage from "./components/CartPage";
 import ClickedItems from "./components/ClickedItems";
 import ItemPage from "./components/ItemPage";
+import Profile from "./components/Profile";
+import ProfileInformation from "./subComponents/ProfileInformation";
+import ProfilePage from "./components/ProfilePage";
+import Cart from "./components/Cart";
 
 function App() {
   return (
@@ -16,8 +20,11 @@ function App() {
           <Route path="/signup" element={<Register />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/items/:id" element={<ItemPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </BrowserRouter>
+      {/* <Profile /> */}
+      {/* <ProfileInformation /> */}
     </>
   );
 }

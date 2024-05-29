@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Header2 from "./Header2";
 import ClickedItems from "./ClickedItems";
 import Footer from "./Footer";
+import Cart from "./Cart";
 
 const ItemPage = () => {
   return (
