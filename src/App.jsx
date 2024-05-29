@@ -9,6 +9,7 @@ import Profile from "./components/Profile";
 import ProfileInformation from "./subComponents/ProfileInformation";
 import ProfilePage from "./components/ProfilePage";
 import Cart from "./components/Cart";
+import Wishlist from "./subComponents/Wishlist";
 
 function App() {
   return (
@@ -20,11 +21,14 @@ function App() {
           <Route path="/signup" element={<Register />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/items/:id" element={<ItemPage />} />
+          <Route path="/profile/items/:id" element={<ItemPage />} />
+          <Route path="/cart/items/:id" element={<ItemPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </BrowserRouter>
       {/* <Profile /> */}
       {/* <ProfileInformation /> */}
+      {/* <Wishlist /> */}
     </>
   );
 }

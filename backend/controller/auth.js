@@ -10,8 +10,28 @@ exports.userlist = (req, res) => {
   });
 };
 
+exports.cartlist = (req, res) => {
+  db.query("SELECT * from cart", [], async (err, results) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(JSON.stringify({ status: 200, error: null, message: results }));
+    }
+  });
+};
+
+exports.wishlist = (req, res) => {
+  db.query("SELECT * from wishlist", [], async (err, results) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(JSON.stringify({ status: 200, error: null, message: results }));
+    }
+  });
+};
+
 exports.singleuserlist = (req, res) => {
-  let user = {id: req.params.id}
+  let user = { id: req.params.id };
   db.query("SELECT * from users where ?", [user], async (err, results) => {
     if (err) {
       console.log(err);
@@ -19,7 +39,7 @@ exports.singleuserlist = (req, res) => {
       res.send(JSON.stringify({ status: 200, error: null, message: results }));
     }
   });
-}
+};
 
 exports.signup = (req, res) => {
   const { username, email, password } = req.body;
@@ -52,8 +72,7 @@ exports.signup = (req, res) => {
                   message: "Email already exist",
                 })
               );
-            }
-            else {
+            } else {
               db.query(
                 "INSERT into users set ?",
                 [{ username: username, email: email, password: password }],
@@ -64,7 +83,8 @@ exports.signup = (req, res) => {
                       JSON.stringify({
                         status: 200,
                         error: null,
-                        message: "Sign up successful", results,
+                        message: "Sign up successful",
+                        results,
                       })
                     );
                   }
@@ -79,22 +99,86 @@ exports.signup = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  const {username, password} = req.body;
-  db.query("SELECT * from users where username = ? and password = ?", [username, password], async(err, results) => {
-    if(results == '') {
-      res.send(JSON.stringify({status: 200, error: null, message: 'Email or password is incorrect'}))
+  const { username, password } = req.body;
+  db.query(
+    "SELECT * from users where username = ? and password = ?",
+    [username, password],
+    async (err, results) => {
+      if (results == "") {
+        res.send(
+          JSON.stringify({
+            status: 200,
+            error: null,
+            message: "Email or password is incorrect",
+          })
+        );
+      } else {
+        res.send(
+          JSON.stringify({
+            status: 200,
+            error: null,
+            message: "Login successful",
+            results,
+          })
+        );
+      }
     }
+  );
+};
+
+exports.update = (req, res) => {
+  let user = { id: req.params.id };
+  let updateData = req.body;
+  db.query(
+    "UPDATE users set ? where ?",
+    [updateData, user],
+    async (err, results) => {
+      if (err) throw err;
+      res.send(
+        JSON.stringify({
+          status: 200,
+          error: null,
+          message: "Update successful",
+        })
+      );
+    }
+  );
+};
+
+exports.storedata = (req, res) => {
+  let data = req.body;
+  db.query("INSERT INTO cart SET ?", data, async (err, results) => {
+    if (err) throw err;
     else {
-      res.send(JSON.stringify({status: 200, error: null, message: 'Login successful', results}))
+      res.send(JSON.stringify({ status: 200, error: null, message: 'Data stored' }));
     }
+  });
+};
+
+exports.storewish = (req, res) => {
+  let data = req.body;
+  db.query("INSERT INTO wishlist SET ?", data, async (err, results) => {
+    if (err) throw err;
+    else {
+      res.send(JSON.stringify({ status: 200, error: null, message: 'Data stored' }));
+    }
+  });
+};
+
+exports.deleteitem = (req, res) => {
+  let itemId = {item_id: req.params.id};
+  console.log(itemId)
+  db.query("DELETE FROM cart WHERE ?", [itemId], async (err, results) =>{
+    if(err) throw err;
+    res.send(JSON.stringify({status: 200, error: null, message: 'Deleted'}))
   })
 }
 
-exports.update = (req, res) => {
-  let user = {id:req.params.id}
-  let updateData = req.body;
-  db.query("UPDATE users set ? where ?", [updateData, user], async (err, results) => {
-    if(err) throw(err)
-    res.send(JSON.stringify({status: 200, error: null, message: 'Update successful'}))
+exports.deletewishitem = (req, res) => {
+  let itemId = {wish_id: req.params.id};
+  console.log(itemId)
+  db.query("DELETE FROM wishlist WHERE ?", [itemId], async (err, results) =>{
+    if(err) throw err;
+    res.send(JSON.stringify({status: 200, error: null, message: 'Deleted'}))
   })
 }

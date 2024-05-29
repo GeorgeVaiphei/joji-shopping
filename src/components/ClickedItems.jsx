@@ -1,24 +1,52 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../styles/citems.css";
 import { ToastContainer, toast } from "react-toastify";
 
 const ClickedItems = () => {
   const params = useParams();
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [item, setItem] = useState("");
   const navigate = useNavigate();
 
-  let id = params.id;
+  const [cart, setCart] = useState(false);
+  const [wish, setWish] = useState(false);
+  const [wishId, setWishId] = useState([]);
+  const [cartId, setCartId] = useState([]);
+
+  var id = params.id;
   console.log("Id : " + id);
+  useEffect(() => {
+    wishId.map((item) => {
+      console.log("items are : ", item.wish_id);
+      if (item.wish_id == id) {
+        setWish(true);
+      }
+    });
+    cartId.map((item) => {
+      console.log("items are : ", item.item_id);
+      if (item.item_id == id) {
+        setCart(true);
+      }
+    });
+  }, [cartId]);
 
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     axios.get("https://dummyjson.com/products/" + id).then((res) => {
       console.log(res.data);
       setItem(res.data);
     });
+    axios.get("http://localhost:8080/cartlist").then((res) => {
+      console.log(res.data.message);
+      setCartId(res.data.message);
+    });
+    axios.get("http://localhost:8080/wishlist").then((res) => {
+      console.log(res.data.message);
+      setWishId(res.data.message);
+    });
+    // setIsLoading(false);
   }, [id]);
 
   const offers = [
@@ -36,28 +64,101 @@ const ClickedItems = () => {
   ];
 
   const buyHandler = () => {
-    if(!localStorage.getItem('email')) {
+    if (!localStorage.getItem("email")) {
       toast.warning("Please login first");
-      setTimeout(() => {
-        navigate('/signup');
-      }, 1000);
     }
-  }
+  };
+
+  // ====== CART HANDLER ======
+
+  const cartHandler = () => {
+    if (!localStorage.getItem("email")) {
+      toast.warning("Please login first");
+    } else {
+      if (cart) {
+        let uid = id;
+        console.log("uid ", uid);
+        axios.delete("http://localhost:8080/deleteitem/" + uid).then((res) => {
+          console.log(res);
+          if (res.data.message == "Deleted") {
+            setCart(false);
+            console.log("Cart Deleted");
+          }
+        });
+      } else {
+        let data = {
+          item_id: item.id,
+          item_title: item.title,
+          item_thumbnail: item.thumbnail,
+          item_price: item.price,
+          item_stock: item.stock,
+          item_discountPercentage: item.discountPercentage,
+        };
+
+        axios.post("http://localhost:8080/storedata", data).then((res) => {
+          console.log(res);
+          if (res.data.message == "Data stored") {
+            setCart(true);
+            console.log("Cart added");
+          }
+        });
+        console.log("Cart ", data);
+      }
+    }
+  };
+
+  // ====== WISH HANDLER ======
+
+  const wishHandler = () => {
+    if (!localStorage.getItem("email")) {
+      toast.warning("Please login first");
+    } else {
+      if (wish) {
+        let uid = id;
+        console.log("uid ", uid);
+        axios.delete("http://localhost:8080/deletewishitem/" + uid).then((res) => {
+          console.log(res);
+          if (res.data.message == "Deleted") {
+            setWish(false);
+            console.log("Wish Deleted");
+          }
+        });
+      } else {
+        let data = {
+          wish_id: item.id,
+          item_title: item.title,
+          item_thumbnail: item.thumbnail,
+          item_price: item.price,
+          item_stock: item.stock,
+          item_discountPercentage: item.discountPercentage,
+        };
+
+        axios.post("http://localhost:8080/storewish", data).then((res) => {
+          console.log(res);
+          if (res.data.message == "Data stored") {
+            setWish(true);
+            console.log("Wish added");
+          }
+        });
+        console.log("Wish ", data);
+      }
+    }
+  };
 
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <div className="cItems container">
         <div className="cItems__wrapper">
           <div className="thumbnail">
             <img src={item.thumbnail} alt="thumbnail" />
             <div className="choice">
-              <button className="cartBtn">
+              <button className="cartBtn" onClick={cartHandler}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
+                  fill={cart ? "#aaa" : "none"}
                   viewBox="0 0 24 24"
-                  strokeWidth="1.5"
+                  strokeWidth={cart ? "0.5" : "1.5"}
                   stroke="currentColor"
                 >
                   <path
@@ -66,15 +167,15 @@ const ClickedItems = () => {
                     d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
                   />
                 </svg>
-                Add to Cart
+                {cart ? "Remove from Cart" : "Add to Cart"}
               </button>
-              <button className="wishBtn">
+              <button className="wishBtn" onClick={wishHandler}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
+                  fill={wish ? "red" : "none"}
                   viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
+                  strokeWidth={wish ? "0" : "1.5"}
+                  // stroke={wish ? "red" : "currentColor"}
                 >
                   <path
                     strokeLinecap="round"
@@ -82,7 +183,7 @@ const ClickedItems = () => {
                     d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
                   />
                 </svg>
-                Add to Wishlist
+                {wish ? "Remove from Wishlist" : "Add to Wishlist"}
               </button>
             </div>
           </div>

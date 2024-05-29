@@ -3,13 +3,14 @@ import "../styles/profile.css";
 import ProfileInformation from "../subComponents/ProfileInformation";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Wishlist from "../subComponents/Wishlist";
 
 const Profile = () => {
   const pName = localStorage.getItem("username") ||  'user';
-  // let name = localStorage.getItem("username") || 'User';
   const [windowSize, setWindowSize] = useState(false);
   const [proInfo, setProInfo] = useState(true);
   const [proInfo2, setProInfo2] = useState(true);
+  const [wishInfo, setWishInfo] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -137,7 +138,17 @@ const Profile = () => {
                 </span>
                 <span className="sub__pro__nav">My Coupons</span>
                 <span className="sub__pro__nav">My Reviews & Ratings</span>
-                <span className="sub__pro__nav">My Wishlist</span>
+                <span className="sub__pro__nav"
+                onClick={() => setWishInfo(prev => !prev)}
+                style={
+                  wishInfo
+                    ? { backgroundColor: "#e5e7eb", color: "#1d4ed8" }
+                    : {}
+                }
+                >My Wishlist</span>
+                <section>
+                  {!windowSize && wishInfo && <Wishlist />}
+                </section>
               </div>
               <div className="head" onClick={logoutHandler}>
                 <svg
@@ -160,6 +171,7 @@ const Profile = () => {
 
           <div className="pro2">
             {windowSize && proInfo2 && <ProfileInformation />}
+            {windowSize && wishInfo && <Wishlist />}
           </div>
         </div>
       </div>

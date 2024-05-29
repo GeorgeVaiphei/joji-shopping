@@ -1,8 +1,10 @@
 .cart {
+    margin-top: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 70vh;
+    /* border:  1px solid red; */
 }
 
 .cart__wrapper {
